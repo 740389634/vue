@@ -79,7 +79,8 @@
         </span>
         <!--End 所在收货地区 End-->
         <span class="fr">
-            <span class="fl">你好，请<a href="Login.html">登录</a>&nbsp; <a href="Regist.html" style="color:#ff4e00;">免费注册</a>&nbsp;|&nbsp;<a href="#">我的订单</a>&nbsp;|</span>
+          <span class="fl">你好，请<a><router-link to="/user">{{name}}</router-link>&nbsp;</a>&nbsp; <a href="Regist.html" style="color:#ff4e00;">免费注册</a>&nbsp;|&nbsp;<a href="#">我的订单</a>&nbsp;|
+            </span>
             <span class="ss">
               <div class="ss_list">
                 <a href="#">收藏夹</a>
@@ -119,6 +120,7 @@
                     </div>
                 </div>
             </span>
+          <span class="fl">|&nbsp;关注我们：</span>
             <span class="fl">|&nbsp;关注我们：</span>
             <span class="s_sh"><a href="#" class="sh1">新浪</a><a href="#" class="sh2">微信</a></span>
             <span class="fr">|&nbsp;<a href="#">手机版&nbsp;<img src="/static/images/s_tel.png" align="absmiddle" /></a></span>
@@ -132,7 +134,13 @@
 
 <script>
 export default {
-  name: 'App'
+  data () {
+    return {
+      name: localStorage.getItem("name"),
+      token: localStorage.getItem("token")
+
+    }
+  }
 }
 </script>
 

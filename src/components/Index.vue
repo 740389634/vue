@@ -26,9 +26,6 @@ export default {
 
   mounted () {
     axios
-      .get('http://localhost/blog/public/show/show')
-      .then(response => (this.msg = response.data))
-    axios
       .get('http://localhost/blog/public/show/show1')
       .then(response => (this.arr = response.data))
     axios

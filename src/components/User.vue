@@ -9,7 +9,7 @@
               <div class="left_m_t t_bg1">订单中心</div>
               <ul>
                 <li><a href="Member_Order.html">我的订单</a></li>
-                <li><a href="Member_Address.html">收货地址</a></li>
+                <li><router-link to="/address"><a>收货地址</a></router-link></li>
                 <li><a href="#">缺货登记</a></li>
                 <li><a href="#">跟踪订单</a></li>
               </ul>
@@ -97,11 +97,9 @@
                 <td>注册时间：<span style="color:#555555;">2015-10-10</span></td>
               </tr>
               <tr>
-                <td>用户：<a><span style="color:#555555;"@click="loginout">{{name}}|退出</span></a></td>
-              </tr>
+              <td>用户：<a><span style="color:#555555;"@click="loginout">{{name}}|退出</span></a></td>
+            </tr>
             </table>
-
-
           </div>
         </div>
         <!--End 用户中心 End-->
@@ -196,7 +194,7 @@ export default {
     return {
       name: localStorage.getItem("name"),
       email: 'this.email',
-      token: localStorage.getItem("token")
+      token: localStorage.getItem("token"),
     }
   },
   methods : {
@@ -215,6 +213,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-
-</style>

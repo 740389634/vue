@@ -10,7 +10,7 @@
           <span class="fl"><a href="#">咖啡</a><a href="#">iphone 6S</a><a href="#">新鲜美食</a><a href="#">蛋糕</a><a href="#">日用品</a><a href="#">连衣裙</a></span>
         </div>
         <div class="i_car">
-          <div class="car_t">购物车 [ <span>3</span> ]</div>
+          <router-link to="/buycar"><div class="car_t">购物车</div></router-link>
         </div>
       </div>
       <!--End Header End-->
@@ -315,7 +315,7 @@
               <span class="fl">{{k}}：</span>
               <label>
                 <span v-for="timk in v">
-                  <input type="radio" v-bind:value="timk[1]" v-bind:name="k" v-on:click="getradio">{{timk[0]}}
+                  <input type="radio" v-bind:value="timk[1]" v-bind:name="k" v-bind:value1="timk[0]"  v-on:click="getradio">{{timk[0]}}
                 </span>
               </label>
             </div>
@@ -743,7 +743,8 @@ export default {
       price:[],
       isajax:1,
       token: localStorage.getItem("token"),
-      name: localStorage.getItem("name")
+      name: localStorage.getItem("name"),
+      attr:[]
     }
   },
   mounted:function () {
@@ -754,17 +755,11 @@ export default {
       .then(response=> {
         this.msg=response.data
       })
-    // axios.post(this.url+'/api/auth/me',{
-    //   token: this.token,
-    // })
-    //   .then(response=> {
-    //     this.user_name=response.data
-    //     console.log(this.user_name)
-    //   })
   },
   methods : {
     getradio () {
       var  _this = this
+      _this.attr=''
       $.each(this.msg.data,function (key,val){
         if ($("input[name='"+key+"']:checked").val()==undefined) {
           _this.isajax=0
@@ -773,17 +768,18 @@ export default {
       })
       if (this.isajax==1){
         var id=''
+        var name=''
+
         $.each(this.msg.data,function (keys,value) {
           id=id+"-"+ $("input[name='"+keys+"']:checked").val()
+          _this.attr=_this.attr +" "+$("input[name='"+keys+"']:checked").attr('name')+":"+ $("input[name='"+keys+"']:checked").attr('value1')
         })
-        //获取价格的
         axios.post(this.url+'/api/show/shopping',{
           id:id,
           uid:this.$route.query.aId,
         })
           .then(response =>{
             this.price=response.data
-            console.log(response.data);
           })
       }
       this.isajax = 1
@@ -795,10 +791,9 @@ export default {
         num:num,
         goods_id:this.price[0].id,
         token:this.token,
+        name: this.msg.name,
+        attr_name:this.attr,
       })
-        .then(response =>{
-          console.log(response.data);
-        })
     }
   }
 

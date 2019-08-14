@@ -270,6 +270,7 @@
         <div class="content mar_20">
           <table border="0" class="car_tab" style="width:1200px; margin-bottom:50px;" cellspacing="0" cellpadding="0">
             <tr>
+              <td class="car_th" width="140">全选<input type="checkbox"/></td>
               <td class="car_th" width="490">商品名称</td>
               <td class="car_th" width="140">属性</td>
               <td class="car_th" width="150">购买数量</td>
@@ -277,32 +278,35 @@
               <td class="car_th" width="140">返还积分</td>
               <td class="car_th" width="150">操作</td>
             </tr>
-            <tr>
+            <tr v-for="key in data">
               <td>
-                <div class="c_s_img"><img src="/static/images/c_1.jpg" width="73" height="73" /></div>
-                Rio 锐澳 水蜜桃味白兰地鸡尾酒（预调酒） 275ml
+                <input type="checkbox" v-bind:value="key.id"   @click="totalprice(key)">
               </td>
-              <td align="center">颜色：灰色</td>
+              <td >
+                <div class="c_s_img"><img src="/static/images/c_1.jpg" width="73" height="73" /></div>
+                {{key.name}}
+              </td>
+              <td align="center">{{key.attribute_name}}</td>
               <td align="center">
                 <div class="c_num">
-                  <input type="button" value="" onclick="jianUpdate1(jq(this));" class="car_btn_1" />
-                  <input type="text" value="1" name="" class="car_ipt" />
-                  <input type="button" value="" onclick="addUpdate1(jq(this));" class="car_btn_2" />
+                  <input type="button" v-bind:disabled="key.number===1" value="" v-on:click="green(key.number-= 1,key.id,key)" onclick="jianUpdate1(jq(this));" class="car_btn_1" />
+                  <input type="text"  v-bind:value="key.number" class="car_ipt"  />
+                  <input type="button" value="" v-on:click="green(key.number+= 1,key.id,key)" onclick="addUpdate1(jq(this));" class="car_btn_2" />
                 </div>
               </td>
-              <td align="center" style="color:#ff4e00;">￥620.00</td>
+              <td align="center" style="color:#ff4e00;">￥{{key.price*key.number}}</td>
               <td align="center">26R</td>
               <td align="center"><a onclick="ShowDiv('MyDiv','fade')">删除</a>&nbsp; &nbsp;<a href="#">加入收藏</a></td>
             </tr>
             <tr height="70">
               <td colspan="6" style="font-family:'Microsoft YaHei'; border-bottom:0;">
-                <label class="r_rad"><input type="checkbox" name="clear" checked="checked" /></label><label class="r_txt">清空购物车</label>
-                <span class="fr">商品总价：<b style="font-size:22px; color:#ff4e00;">￥2899</b></span>
+                <label class="r_rad"><input type="checkbox" name="clear"  /></label><label class="r_txt">清空购物车</label>
+                <span class="fr">商品总价：<b style="font-size:22px; color:#ff4e00;">￥{{price}}</b></span>
               </td>
             </tr>
             <tr valign="top" height="150">
               <td colspan="6" align="right">
-                <a href="#"><img src="/static/images/buy1.gif" /></a>&nbsp; &nbsp; <a href="#"><img src="/static/images/buy2.gif" /></a>
+                <a href="#"><img src="/static/images/buy1.gif" /></a>&nbsp; &nbsp;    <a @click="add()"><img src="/static/images/buy2.gif" /></a>
               </td>
             </tr>
           </table>
@@ -425,7 +429,13 @@ export default {
   data () {
     return {
       name: localStorage.getItem("name"),
-      token: localStorage.getItem("token")
+      token: localStorage.getItem("token"),
+      data:[],
+      shopping:[],
+      price:0,
+      arr:[],
+      nerder:[]
+
     }
   },
   mounted() {
@@ -433,8 +443,61 @@ export default {
       token:this.token,
     })
       .then(response=> {
-        // console.log(response.data)
+        this.data=response.data
       })
+  },
+  methods : {
+    green (number,id,key){
+      if (number<=1) {
+
+      }
+      axios.post(this.url+'/api/cate/number',{
+        number:number,
+        id:id,
+      })
+        .then(response=> {
+          if (this.shopping[id]==undefined||this.shopping[id]=='') {
+          }else{
+            this.shopping[id]=key
+            var toatlp = 0;
+            this.shopping.forEach(function (val) {
+              if (val!='') {
+                toatlp+=val.number*val.price
+              }
+            })
+            this.price=toatlp
+          }
+        })
+    },
+    totalprice (totalprice) {
+      var arr=totalprice.id
+
+      if (this.shopping[arr]==undefined||this.shopping[arr]=='') {
+        this.shopping[arr]=totalprice
+
+      }else{
+        this.shopping[arr]=''
+
+      }
+      var toatlp = 0;
+      this.shopping.forEach(function (val) {
+        if (val!='') {
+          toatlp+=val.number*val.price
+        }
+      })
+      this.price=toatlp
+    },
+    add () {
+      var city=$("input[type='checkbox']:checked")
+      var nerder=''
+      for (var i = 0; i<city.length; i++){
+        nerder=nerder+"-"+city[i].value
+
+      }
+      this.nerder=nerder
+      localStorage.setItem("id", this.nerder);
+      this.$router.push({ path:'buycar_two'  })
+    }
   }
 }
 </script>

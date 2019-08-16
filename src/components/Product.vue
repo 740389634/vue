@@ -785,8 +785,8 @@ export default {
       this.isajax = 1
     },
     shoppingcate (){
-
       var num=document.getElementById("a1").value
+
       axios.post(this.url+'/api/cate/shopping_cate',{
         num:num,
         goods_id:this.price[0].id,

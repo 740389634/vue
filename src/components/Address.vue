@@ -278,10 +278,15 @@ export default {
 
     },
     add_address () {
+
       var data=$('#data option:selected').html()
+
       var city=$('#city option:selected').html()
+
       var diqu=$('#diqu option:selected').html()
+
       var address=data+"省"+city+"市"+diqu
+
       this.ressadd=address
       axios.post(this.url+'/api/order/address',{
         address:this.ressadd,

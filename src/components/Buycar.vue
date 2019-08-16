@@ -488,12 +488,15 @@ export default {
       this.price=toatlp
     },
     add () {
+
       var city=$("input[type='checkbox']:checked")
+
       var nerder=''
       for (var i = 0; i<city.length; i++){
         nerder=nerder+"-"+city[i].value
 
       }
+
       this.nerder=nerder
       localStorage.setItem("id", this.nerder);
       this.$router.push({ path:'buycar_two'  })
